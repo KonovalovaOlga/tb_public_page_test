@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TradableBits Auto Embed (iframe)</title>
+  <style>
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .error { color: red; padding: 1rem; font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <div id="embedded-app-placeholder" style="width:100%;"></div>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const urlId = params.get("id");
+
+      if (!urlId || !/^\d+$/.test(urlId)) {
+        document.getElementById("embedded-app-placeholder").innerHTML =
+          "<p class='error'>Missing or invalid app ID. Use ?id=12345</p>";
+        return;
+      }
+
+      const appId = parseInt(urlId, 10);
+      const container = document.getElementById("embedded-app-placeholder");
+      const iframe = document.createElement("iframe");
+
+      iframe.src = `https://tradablebits.com/tb_app/${appId}`;
+      iframe.title = `Entry Form autotest ${appId} Limit Fan Entries>Daily`;
+      iframe.style.border = "0";
+      iframe.style.width = "100%";
+      iframe.style.height = "400px";
+      iframe.allow = "clipboard-read; clipboard-write; web-share";
+      iframe.sandbox = "allow-storage-access-by-user-activation allow-top-navigation allow-forms allow-modals allow-downloads allow-popups allow-scripts allow-same-origin";
+
+      container.appendChild(iframe);
+    })();
+  </script>
+</body>
+</html>

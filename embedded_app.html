@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TradableBits Auto Embed</title>
+  <style>
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .error { color: red; padding: 1rem; font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <div id="embedded-app-placeholder" style="width:100%;"></div>
+
+  <script src="https://tradablebits.com/embedded.js"></script>
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const urlId = params.get("id");
+
+      if (!urlId || !/^\d+$/.test(urlId)) {
+        document.getElementById("embedded-app-placeholder").innerHTML =
+          "<p class='error'>Missing or invalid app ID. Use ?id=12345</p>";
+        return;
+      }
+
+      const appId = parseInt(urlId, 10);
+      const container = document.getElementById("embedded-app-placeholder");
+      const containerId = `embedded-app-${appId}`;
+      container.id = containerId;
+
+      if (typeof loadTradablebitsApp !== "function") {
+        console.error("TradableBits script failed to load.");
+        container.innerHTML = "<p class='error'>Failed to load embed script.</p>";
+        return;
+      }
+
+      loadTradablebitsApp(containerId, appId, "https://tradablebits.com");
+    })();
+  </script>
+</body>
+</html>

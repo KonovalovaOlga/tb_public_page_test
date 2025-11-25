@@ -15,8 +15,11 @@
   <script>
     (function () {
       const params = new URLSearchParams(window.location.search);
-      const urlId = params.get("id");
 
+      const host = params.get("host");
+      const hostname = host ? host.replace(/\/+$/, "") : window.location.origin;
+
+      const urlId = params.get("id");
       if (!urlId || !/^\d+$/.test(urlId)) {
         document.getElementById("embedded-app-placeholder").innerHTML =
           "<p class='error'>Missing or invalid app ID. Use ?id=12345</p>";
@@ -27,13 +30,14 @@
       const container = document.getElementById("embedded-app-placeholder");
       const iframe = document.createElement("iframe");
 
-      iframe.src = `https://tradablebits.com/tb_app/${appId}`;
+      iframe.src = `${hostname}/tb_app/${appId}`;
       iframe.title = `Entry Form autotest ${appId} Limit Fan Entries>Daily`;
       iframe.style.border = "0";
       iframe.style.width = "100%";
       iframe.style.height = "1200px";
       iframe.allow = "clipboard-read; clipboard-write; web-share";
-      iframe.sandbox = "allow-storage-access-by-user-activation allow-top-navigation allow-forms allow-modals allow-downloads allow-popups allow-scripts allow-same-origin";
+      iframe.sandbox =
+        "allow-storage-access-by-user-activation allow-top-navigation allow-forms allow-modals allow-downloads allow-popups allow-scripts allow-same-origin";
 
       container.appendChild(iframe);
     })();
